@@ -12,17 +12,6 @@ def recognise_encoging(file):
                 break
         detector.close()
         return detector.result['encoding']
-# print(recognise_encoging('newsafr.txt'))
-
-
-# def get_list_text_file(path='.'):
-#     list_text_file = []
-#     dirs = os.listdir(path)
-#     for item in dirs:
-#         if '.' in item:
-#             if item.split('.')[1] == 'txt': # для других расширений попробывать- отдельный if.
-#                 list_text_file.append(os.path.abspath(item))
-#     return list_text_file
 
 
 def get_list_text_file(path='.'):
