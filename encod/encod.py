@@ -19,7 +19,7 @@ def get_list_text_file(path='.'):
     dirs = os.listdir(path)
     for item in dirs:
         if '.' in item:
-            if os.path.splitext(item)[1] == '.txt': # для других расширений попробывать- отдельный if.
+            if os.path.splitext(item)[1] == '.txt':
                 list_text_file.append(os.path.abspath(item))
     return list_text_file
 
@@ -40,7 +40,8 @@ def count_max_occurr_word(file):
     print(word_count_result[:10])
 
 
-list_text_file = get_list_text_file()
-for item in list_text_file:
-    print(f"Частота слов в файле {os.path.basename(item)}:")
-    count_max_occurr_word(item)
+if __name__ == "__main__":
+    list_text_file = get_list_text_file()
+    for item in list_text_file:
+        print(f"Частота слов в файле {os.path.basename(item)}:")
+        count_max_occurr_word(item)
