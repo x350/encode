@@ -1,8 +1,8 @@
 import os
 from chardet.universaldetector import UniversalDetector
 import operator
-from pprint import pprint
 import json
+import xml.etree.ElementTree as ET
 
 
 def recognise_encoging(file):
@@ -12,8 +12,8 @@ def recognise_encoging(file):
             detector.feed(line)
             if detector.done:
                 break
-        detector.close()
-        return detector.result['encoding']
+    detector.close()
+    return detector.result['encoding']
 
 
 def get_list_file(path='.', extend='.txt'):
@@ -29,26 +29,11 @@ def get_list_file(path='.', extend='.txt'):
 def text_file_to_list_word(file):
     encod = recognise_encoging(file)
     with open(file, 'r', encoding=encod) as f:
-        data = f.read().lower().split()
-        return data
-
-
-def count_word(data):
-    word_count = {}
-    for i in data:
-        if (i in data) and (len(i) > 6):
-            if i in word_count:
-                word_count[i] += 1
-            else:
-                word_count[i] = 1
-    word_count_tuple = word_count.items()
-    word_count_result = sorted(word_count_tuple, key=operator.itemgetter(1), reverse=True)
-    print(word_count_result[:10])
+        return f.read().lower().split()
 
 
 def json_file_to_list_word(file):
     all_str = ''
-    word_count = {}
     encod = recognise_encoging(file)
     with open(file, 'r', encoding=encod) as f:
         data = json.load(f)
@@ -58,17 +43,44 @@ def json_file_to_list_word(file):
         for item in content_item:
             all_str += item['title']
             all_str += item['description']
-    list_str = all_str.lower().split()
-    return list_str
+    return all_str.lower().split()
+
+
+def xml_file_to_list_word(file):
+    all_str = ''
+    encod = recognise_encoging(file)
+    xmlparser = ET.XMLParser(encoding=encod)
+    tree = ET.parse(file, parser=xmlparser)
+    for elem in tree.getiterator():
+        if elem.tag == 'title':
+            all_str += elem.text
+        elif elem.tag == 'description':
+            all_str += elem.text
+    return all_str.lower().split()
+
+
+def count_word(list_word):
+    word_count = {}
+    for i in list_word:
+        if (i in list_word) and (len(i) > 6):
+            if i in word_count:
+                word_count[i] += 1
+            else:
+                word_count[i] = 1
+    word_count_tuple = word_count.items()
+    word_count_result = sorted(word_count_tuple, key=operator.itemgetter(1), reverse=True)
+    print(word_count_result[:10])
 
 
 if __name__ == "__main__":
-   list_text_file = get_list_file()
-   for item in list_text_file:
-       print(f"Частота слов в файле {os.path.basename(item)}:")
-       count_word(text_file_to_list_word(item))
+    for item in get_list_file():
+        print(f"Частота слов в файле {os.path.basename(item)}:")
+        count_word(text_file_to_list_word(item))
 
-   list_json_file = get_list_file(extend='.json')
-   for item in list_json_file:
-       print(f"Частота слов в файле {os.path.basename(item)}:")
-       count_word(json_file_to_list_word(item))
+    for item in get_list_file(extend='.json'):
+        print(f"Частота слов в файле {os.path.basename(item)}:")
+        count_word(json_file_to_list_word(item))
+
+    for item in get_list_file(extend='.xml'):
+        print(f"Частота слов в файле {os.path.basename(item)}:")
+        count_word(xml_file_to_list_word(item))
