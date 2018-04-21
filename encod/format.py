@@ -17,13 +17,13 @@ def recognise_encoging(file):
 
 
 def get_list_file(path='.', extend='.txt'):
-    list_xml_file = []
+    list_file = []
     dirs = os.listdir(path)
     for item in dirs:
         if '.' in item:
             if os.path.splitext(item)[1] == extend:
-                list_xml_file.append(os.path.abspath(item))
-    return list_xml_file
+                list_file.append(os.path.abspath(item))
+    return list_file
 
 
 def text_file_to_list_word(file):

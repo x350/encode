@@ -36,10 +36,32 @@
 # не забываем организовывать собственный код в функции
 
 import os
+from chardet.universaldetector import UniversalDetector
 
 migrations = 'Migrations'
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
-    print(current_dir)
-    pass
+
+    def recognise_encoging(file):
+        detector = UniversalDetector()
+        with open(file, 'rb') as f:
+            for line in f:
+                detector.feed(line)
+                if detector.done:
+                    break
+        detector.close()
+        return detector.result['encoding']
+
+
+    def get_list_file(path='.', extend='.sql'):
+        list_xml_file = []
+        dirs = os.listdir(path)
+        for item in dirs:
+            if '.' in item:
+                if os.path.splitext(item)[1] == extend:
+                    list_xml_file.append(os.path.abspath(item))
+        return list_xml_file
+
+
+    print()
