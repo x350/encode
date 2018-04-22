@@ -48,9 +48,9 @@ def check_list(list_file, my_substring):
     return result_list
 
 if __name__ == '__main__':
-    dir_with_file = 'Migrations'
+    dir_with_files = 'Migrations'
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    list_found_file = get_list_file(dir_file=dir_with_file)
+    list_found_file = get_list_file(dir_file=dir_with_files)
     while True:
         my1_substring = input_substring()
         if my1_substring == 'q':
