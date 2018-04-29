@@ -26,11 +26,11 @@ def detect_content_dir(name_dir, name_curent_dir):
 
 
 def make_dir(name_new_dir):
-    if detect_platform == 'win32':
+    if detect_platform() == 'win32':
         args = ['mkdir', name_new_dir]
     elif detect_platform == 'linux':
         args = ['mkdir ' + name_new_dir]
-    subprocess.Popen(['mkdir', name_new_dir], shell=True)
+    subprocess.Popen(args, shell=True)
     return os.path.join(os.getcwd(), name_new_dir)
 
 
@@ -93,7 +93,3 @@ if __name__ == '__main__':
 
     with Pool(processes=4) as pool:
         pool.map(run_programm, make_commands(name_command))
-
-
-
-
