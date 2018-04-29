@@ -59,7 +59,6 @@ def make_commands(name_command):
 
 
 if __name__ == '__main__':
-
     if detect_platform() == 'win32':
         name_command = 'convert.exe'
     elif detect_platform() == 'linux':
@@ -70,13 +69,11 @@ if __name__ == '__main__':
 
 # ----------------------------
 # Single process
-
     # for i in make_commands(name_command):
     #     run_programm(i)
 
 # ----------------------------
 # Number of foto = number of process
-
     # q = Queue()
     # for i in make_commands(name_command):
     #     q.put(i)
@@ -91,6 +88,5 @@ if __name__ == '__main__':
 
 # ----------------------------
 # Four process
-    
     with Pool(processes=4) as pool:
         pool.map(run_programm, make_commands(name_command))
