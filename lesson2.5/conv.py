@@ -27,10 +27,10 @@ def detect_content_dir(name_dir, name_curent_dir):
 
 def make_dir(name_new_dir):
     if detect_platform() == 'win32':
-        args = ['mkdir', name_new_dir]
-    elif detect_platform == 'linux':
-        args = ['mkdir ' + name_new_dir]
-    subprocess.Popen(args, shell=True)
+        argument = ['mkdir', name_new_dir]
+    elif detect_platform() == 'linux':
+        argument = ['mkdir ' + name_new_dir]
+    subprocess.Popen(argument, shell=True)
     return os.path.join(os.getcwd(), name_new_dir)
 
 
@@ -40,8 +40,8 @@ def run_programm(programm):
 
 
 def make_commands(name_command):
-    dir_sourse = input("Input source dir: ")
-    if not detect_content_dir(dir_sourse, os.getcwd()):
+    dir_source = input("Input source dir (Source): ")
+    if not detect_content_dir(dir_source, os.getcwd()):
         print("There is't this folder.")
         exit(1)
     size = input("Input size in px: ")
@@ -50,11 +50,11 @@ def make_commands(name_command):
     new_path = detect_content_dir(dir_result, os.getcwd())
     if not new_path:
         new_path = make_dir(dir_result)
-    list_dir = os.listdir(dir_sourse)
+    list_dir = os.listdir(dir_source)
     result = []
     if list_dir:
         for item in list_dir:
-            result.append([name_command, os.path.join(dir_sourse, item), '-resize', size, os.path.join(dir_result, item)])
+            result.append([name_command, os.path.join(dir_source, item), '-resize', size, os.path.join(dir_result, item)])
     return result
 
 
@@ -66,6 +66,7 @@ if __name__ == '__main__':
         name_command = 'convert'
     else:
         print("Unknown platform")
+        exit(2)
 
 # ----------------------------
 # Single process
@@ -90,6 +91,6 @@ if __name__ == '__main__':
 
 # ----------------------------
 # Four process
-
+    
     with Pool(processes=4) as pool:
         pool.map(run_programm, make_commands(name_command))
