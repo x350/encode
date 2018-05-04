@@ -26,6 +26,7 @@ def detect_content_dir(name_dir, name_curent_dir):
 
 
 def make_dir(name_new_dir):
+    argument = []
     if detect_platform() == 'win32':
         argument = ['mkdir', name_new_dir]
     elif detect_platform() == 'linux':
@@ -42,27 +43,28 @@ def run_programm(programm):
     subprocess.Popen(programm, stdout=subprocess.PIPE)
 
 
-def make_commands(name_command):
+def make_commands(command):
     dir_source = input("Input source dir (Source): ")
     if not detect_content_dir(dir_source, os.getcwd()):
         print("There is't this folder.")
         exit(1)
     size = input("Input size in px: ")
     dir_result = input("Input result dir: ")
-    new_path = None
+    # new_path = None
     new_path = detect_content_dir(dir_result, os.getcwd())
     if not new_path:
-        new_path = make_dir(dir_result)
+        make_dir(dir_result)
     list_dir = os.listdir(dir_source)
     result = []
     if list_dir:
         for item in list_dir:
-            result.append([name_command, os.path.join(dir_source, item), '-resize',
+            result.append([command, os.path.join(dir_source, item), '-resize',
                            size, os.path.join(dir_result, item)])
     return result
 
 
 if __name__ == '__main__':
+    name_command = ''
     if detect_platform() == 'win32':
         name_command = 'convert.exe'
     elif detect_platform() == 'linux':
