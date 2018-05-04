@@ -30,6 +30,9 @@ def make_dir(name_new_dir):
         argument = ['mkdir', name_new_dir]
     elif detect_platform() == 'linux':
         argument = ['mkdir ' + name_new_dir]
+    else:
+        print("Unknown platform")
+        exit(2)
     subprocess.Popen(argument, shell=True)
     return os.path.join(os.getcwd(), name_new_dir)
 
@@ -54,7 +57,8 @@ def make_commands(name_command):
     result = []
     if list_dir:
         for item in list_dir:
-            result.append([name_command, os.path.join(dir_source, item), '-resize', size, os.path.join(dir_result, item)])
+            result.append([name_command, os.path.join(dir_source, item), '-resize',
+                           size, os.path.join(dir_result, item)])
     return result
 
 
