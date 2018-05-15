@@ -21,7 +21,8 @@ olga_id = 488003955
 TOKEN = '21c43c91e3e5137074f7ccfc737f316e8e3217d8f3457c329021ad34b3b6be2efba8bf092e450e43cb51b'
 
 
-def find_common_friends(source_id, friend_id, token):
+def find_common_friends(source_id, friend_id, tok=None):
+    token = tok or TOKEN
     response = requests.get(
         'https://api.vk.com/method/friends.getMutual',
         params=dict(v='5.74', access_token=token, source_uid=source_id, target_uid=friend_id)
@@ -36,6 +37,6 @@ def find_common_friends(source_id, friend_id, token):
 
 
 if __name__ == '__main__':
-    print(find_common_friends(my_id, target_id, TOKEN))
+    print(find_common_friends(my_id, target_id))
 
 
