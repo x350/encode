@@ -22,8 +22,8 @@ TOKEN = '21c43c91e3e5137074f7ccfc737f316e8e3217d8f3457c329021ad34b3b6be2efba8bf0
 TOKEN1 = '54fb9fc1357d58b299e75f33b0eada3a9fcccb7a6cb6a6d80b5c8796b90274c14c6c751ebd328592e9afd'
 
 
-def find_common_friends(source_id, friend_id, token=None):
-    token = token or TOKEN1
+def find_common_friends(source_id, friend_id, token):
+    token = token
     try:
         response = requests.get(
             'https://api.vk.com/method/friends.getMutual',
@@ -48,6 +48,6 @@ def find_common_friends(source_id, friend_id, token=None):
 
 
 if __name__ == '__main__':
-    print(find_common_friends(my_id, target_id))
+    print(find_common_friends(my_id, target_id, TOKEN1))
 
 
