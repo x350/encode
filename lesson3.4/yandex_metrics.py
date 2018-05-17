@@ -31,7 +31,7 @@ class YaMetrikaManagement:
             print(f"Exception: {ex}")
             exit(1)
 
-        return [c['id'] for c in response.json().get('counters',[])]
+        return [c['id'] for c in response.json().get('counters', [])]
 
     def get_counter_info(self, counter_id):
         try:
@@ -71,6 +71,6 @@ class Counter:
 
 ya_user1 = YaMetrikaManagement(TOKEN)
 for item in ya_user1.counters:
-    print(f"Статистика для счетчика - {item}:")
+    print(f'Статистика для счетчика - {item}:')
     ya1 = Counter(TOKEN, item)
     ya1.get_metrik_counter()
