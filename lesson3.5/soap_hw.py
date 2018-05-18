@@ -3,7 +3,7 @@ from math import ceil
 
 
 def get_mean_temperature(file):
-    temp =[]
+    temp = []
     with open(file, 'r') as f:
         for item in f:
             temp.append(int(item.split()[0]))
