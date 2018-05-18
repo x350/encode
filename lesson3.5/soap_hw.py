@@ -3,13 +3,11 @@ from math import ceil
 
 
 def get_mean_temperature(file):
+    temp =[]
     with open(file, 'r') as f:
-        mean_f = 0
-        count = 0
         for item in f:
-            mean_f += int(item.split()[0])
-            count += 1
-        mean_f = mean_f / count
+            temp.append(int(item.split()[0]))
+        mean_f = sum(temp)/len(temp)
         client = Client('https://www.w3schools.com/xml/tempconvert.asmx?WSDL')
         return round(float(client.service.FahrenheitToCelsius(str(mean_f))), 2)
 
