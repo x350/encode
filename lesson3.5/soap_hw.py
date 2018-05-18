@@ -25,5 +25,5 @@ def price_for_travel(file):
 
 
 if __name__ == '__main__':
-    print(f"Mean temperature - {get_mean_temperature('temps.txt')} C\n")
+    print(f"Mean temperature - {get_mean_temperature('temps.txt')} C.\n")
     price_for_travel('currencies.txt')
