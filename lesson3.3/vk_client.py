@@ -19,7 +19,7 @@ target_id = 96318028
 olga_id = 488003955
 
 TOKEN = 'e29f1d1ba6d14f16a03332576dc7f695e7825357764580eced7513cb749ca8fc4eafe168b9dee28914979'
-TOKEN1 = '54fb9fc1357d58b299e75f33b0eada3a9fcccb7a6cb6a6d80b5c8796b90274c14c6c751ebd328592e9afd'
+TOKEN1 = '0bfa324ecf01b18d8c6d4e425f8efd14aae2bf3cee264f15c072cafc82164783918d27083761e7e489429'
 
 
 def find_common_friends(source_id, friend_id, token):
@@ -48,6 +48,6 @@ def find_common_friends(source_id, friend_id, token):
 
 
 if __name__ == '__main__':
-    print(find_common_friends(72506872, 4058481, TOKEN))
+    print(find_common_friends(72506872, 4058481, TOKEN1))
 
-
+#
