@@ -53,7 +53,6 @@ class LinkedList:
         while item:
             item.next, tail, item = tail, item, item.next
         self.head = tail
-        return tail
 
 
 class LinkedListTestCase(unittest.TestCase):
