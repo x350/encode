@@ -65,7 +65,7 @@ def content_groups(group_id, token):
             return {'name': result['name'], 'gid': result['id'], 'members_count': result['members_count']}
     except KeyError as er:
         print("KeyError: {}".format(er))
-        exit(2)
+        # exit(2)
     except Exception as e:
         print('Exception: {}'.format(e))
         exit(1)
@@ -110,10 +110,21 @@ def resolve_name(screen_name):
         return response['object_id']
 
 
+def detect_activated_user(client_id, token):
+    method = 'users.get'
+    param = dict(user_id=client_id, access_token=token, v=5.78)
+    response = get_vk_request(VkData.request_url, method, param)[0]
+    if 'deactivated' in response.keys():
+        print('Пользователь c id {}- деактивирован.'.format(response['id']))
+        exit(4)
+
+
 if __name__ == '__main__':
     client_id = input("ВВедите исследуемый VK_ID: ")
     if not client_id.isdigit():
         client_id = resolve_name(client_id)
+
+    detect_activated_user(client_id, VkData.token)
 
     list_friends = make_list_friends(client_id, VkData.token)
     friends_group_set = make_set_groups(list_friends)
