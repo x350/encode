@@ -77,11 +77,11 @@ def make_set_groups(list_vk_id):
     friends_group_set = set()
     for item in list_vk_id:
         rr = make_list_groups(item, VkData.token)
-        count_curent += 1
         for i in rr:
             if i:
                 friends_group_set.add(i)
         print('Обработано {}% друзей'.format(count_curent * 100//count_common))
+        count_curent += 1
     return friends_group_set
 
 
