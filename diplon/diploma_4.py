@@ -4,12 +4,15 @@ import json
 
 REQUEST_URL = 'https://api.vk.com/method/'
 CONNECTION_ATTEMPS = 20
+VERSION_API_VK = 5.78
 
 with open('config.json', 'r', encoding='utf-8') as file:
     TOKEN = json.load(file)['token']
 
 
-def get_vk_request(url, method, parametrs=None):
+def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_param={}):
+    parametrs = dict(access_token=token, v=version)
+    parametrs.update(fields_in_param)
     for i in range(CONNECTION_ATTEMPS):
         response = requests.get(url + method, params=parametrs).json()
         if 'response' in response:
@@ -27,22 +30,22 @@ def get_vk_request(url, method, parametrs=None):
     return {}
 
 
-def make_list_friends(user_id, token):
+def make_list_friends(user_id):
     method = 'friends.get'
-    param = dict(user_id=user_id, access_token=token, v=5.78)
-    return get_vk_request(REQUEST_URL, method, param).get('items', None)
+    fields_param = dict(user_id=user_id)
+    return get_vk_request(REQUEST_URL, method, fields_in_param=fields_param).get('items', None)
 
 
-def make_list_groups(user_id, token):
+def make_list_groups(user_id):
     method = 'groups.get'
-    param = dict(user_id=user_id, access_token=token, v=5.78)
-    return get_vk_request(REQUEST_URL, method, param).get('items', [])
+    fields_param = dict(user_id=user_id)
+    return get_vk_request(REQUEST_URL, method, fields_in_param=fields_param).get('items', [])
 
 
-def content_groups(group_id, token):
+def content_groups(group_id):
     method = 'groups.getById'
-    param = dict(group_id=group_id, access_token=token, fields='members_count', v=5.78)
-    result = get_vk_request(REQUEST_URL, method, param)[0]
+    fields_param = dict(group_id=group_id, fields='members_count')
+    result = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
     try:
         return {'name': result['name'], 'gid': result['id'], 'members_count': result['members_count']}
     except KeyError as er:
@@ -54,7 +57,7 @@ def make_set_groups(list_vk_id):
     count_curent = 0
     friends_group_set = set()
     for item in list_vk_id:
-        rr = make_list_groups(item, TOKEN)
+        rr = make_list_groups(item)
         for i in rr:
             if i:
                 friends_group_set.add(i)
@@ -68,7 +71,7 @@ def make_groups_describe_list(iterrible_object):
     count_unique_groups = len(iterrible_object)
     curent_groups_count = 0
     for item in iterrible_object:
-        result_list.append(content_groups(item, TOKEN))
+        result_list.append(content_groups(item))
         print('Обработано {}% уникальных групп'.format(curent_groups_count * 100 // count_unique_groups))
         curent_groups_count += 1
     return result_list
@@ -76,8 +79,8 @@ def make_groups_describe_list(iterrible_object):
 
 def resolve_name(screen_name):
     method = 'utils.resolveScreenName'
-    param = dict(screen_name=screen_name, access_token=TOKEN, v=5.78)
-    response = get_vk_request(REQUEST_URL, method, param)
+    fields_param = dict(screen_name=screen_name)
+    response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)
     if not response:
         print('Пользователь, с таким никнеймом - не существует!')
         exit(3)
@@ -88,10 +91,10 @@ def resolve_name(screen_name):
         return response['object_id']
 
 
-def detect_activated_user(client_id, token):
+def detect_activated_user(client_id):
     method = 'users.get'
-    param = dict(user_id=client_id, access_token=token, v=5.78)
-    response = get_vk_request(REQUEST_URL, method, param)[0]
+    fields_param = dict(user_id=client_id)
+    response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
     if 'deactivated' in response.keys():
         print('Пользователь c id {}- деактивирован.'.format(response['id']))
         exit(4)
@@ -102,9 +105,9 @@ if __name__ == '__main__':
     if not client_id.isdigit():
         client_id = resolve_name(client_id)
 
-    detect_activated_user(client_id, TOKEN)
+    detect_activated_user(client_id)
 
-    list_friends = make_list_friends(client_id, TOKEN)
+    list_friends = make_list_friends(client_id)
     friends_group_set = make_set_groups(list_friends)
     list_id = [client_id]
     user_group_set = make_set_groups(list_id)
