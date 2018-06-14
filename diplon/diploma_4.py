@@ -54,26 +54,23 @@ def content_groups(group_id):
 
 def make_set_groups(list_vk_id):
     count_common = len(list_vk_id)
-    count_curent = 0
     friends_group_set = set()
-    for item in list_vk_id:
+    for index, item in enumerate(list_vk_id):
         rr = make_list_groups(item)
         for i in rr:
             if i:
                 friends_group_set.add(i)
-        print('Обработано {}% друзей'.format(count_curent * 100//count_common))
-        count_curent += 1
+        print('Обработано {}% друзей'.format(index * 100//count_common))
+
     return friends_group_set
 
 
 def make_groups_describe_list(iterrible_object):
     result_list = []
     count_unique_groups = len(iterrible_object)
-    curent_groups_count = 0
-    for item in iterrible_object:
+    for index, item in enumerate(iterrible_object):
         result_list.append(content_groups(item))
-        print('Обработано {}% уникальных групп'.format(curent_groups_count * 100 // count_unique_groups))
-        curent_groups_count += 1
+        print('Обработано {}% уникальных групп'.format(index * 100 // count_unique_groups))
     return result_list
 
 
