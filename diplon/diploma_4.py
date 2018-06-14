@@ -65,10 +65,10 @@ def make_set_groups(list_vk_id):
     return friends_group_set
 
 
-def make_groups_describe_list(iterrible_object):
+def make_groups_describe_list(iterable_object):
     result_list = []
-    count_unique_groups = len(iterrible_object)
-    for index, item in enumerate(iterrible_object):
+    count_unique_groups = len(iterable_object)
+    for index, item in enumerate(iterable_object):
         result_list.append(content_groups(item))
         print('Обработано {}% уникальных групп'.format(index * 100 // count_unique_groups))
     return result_list
@@ -80,29 +80,34 @@ def resolve_name(screen_name):
     response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)
     if not response:
         print('Пользователь, с таким никнеймом - не существует!')
-        exit(3)
+        return 'error'
     elif response['type'] != 'user':
         print("Это не пользователь, а {}!".format(response['type']))
-        exit(3)
+        return 'error'
     else:
         return response['object_id']
 
 
-def detect_activated_user(client_id):
+def detect_deactivated_user(client_id):
     method = 'users.get'
     fields_param = dict(user_id=client_id)
     response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
-    if 'deactivated' in response.keys():
+    if 'deactivated' in response:
         print('Пользователь c id {}- деактивирован.'.format(response['id']))
-        exit(4)
+        return True
+    else:
+        return False
 
 
 if __name__ == '__main__':
     client_id = input("ВВедите исследуемый VK_ID: ")
     if not client_id.isdigit():
         client_id = resolve_name(client_id)
+    if client_id is 'error':
+        exit(3)
 
-    detect_activated_user(client_id)
+    if detect_deactivated_user(client_id):
+        exit(4)
 
     list_friends = make_list_friends(client_id)
     friends_group_set = make_set_groups(list_friends)
