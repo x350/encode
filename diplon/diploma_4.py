@@ -1,29 +1,31 @@
-from urllib.parse import urlencode
 import requests
 import time
 import json
 
 REQUEST_URL = 'https://api.vk.com/method/'
+CONNECTION_ATTEMPS = 20
 
 with open('config.json', 'r', encoding='utf-8') as file:
     TOKEN = json.load(file)['token']
 
 
 def get_vk_request(url, method, parametrs=None):
-    try:
+    for i in range(CONNECTION_ATTEMPS):
         response = requests.get(url + method, params=parametrs).json()
-        time.sleep(0.34)
-        if 'error' in response:
-            print("Error request - {}".format(response['error']['error_msg']))
-            return {}
-        else:
+        if 'response' in response:
             return response.get('response', {})
-    except KeyError as er:
-        print("KeyError: {}".format(er))
-        exit(2)
-    except Exception as e:
-        print('Exception: {}'.format(e))
-        exit(1)
+        elif 'error' in response:
+            if response['error']['error_code'] == 6:
+                print('Connection attemp')
+                continue
+            else:
+                print("Error request - {}".format(response['error']['error_msg ']))
+                return {}
+        else:
+            print(" Ошибка ответа")
+            return {}
+    print("Ошибка осединения")
+    return {}
 
 
 def make_list_friends(user_id, token):
@@ -41,21 +43,25 @@ def make_list_groups(user_id, token):
 def content_groups(group_id, token):
     method = 'groups.getById'
     param = dict(group_id=group_id, access_token=token, fields='members_count', v=5.78)
-    try:
-        response = requests.get(REQUEST_URL + method, params=param).json()
-        time.sleep(0.34)
-        if 'error' in response:
-            print("Error request - {}".format(response['error']['error_msg']))
-            return {}
-        else:
-            result = response.get('response', {})[0]
-            return {'name': result['name'], 'gid': result['id'], 'members_count': result['members_count']}
-    except KeyError as er:
-        print("KeyError: {}".format(er))
-        # exit(2)
-    except Exception as e:
-        print('Exception: {}'.format(e))
-        exit(1)
+    return  get_vk_request(REQUEST_URL, method, param)
+
+
+
+    # try:
+    #     response = requests.get(REQUEST_URL + method, params=param).json()
+    #     time.sleep(0.34)
+    #     if 'error' in response:
+    #         print("Error request - {}".format(response['error']['error_msg']))
+    #         return {}
+    #     else:
+    #         result = response.get('response', {})[0]
+    #         return {'name': result['name'], 'gid': result['id'], 'members_count': result['members_count']}
+    # except KeyError as er:
+    #     print("KeyError: {}".format(er))
+    #     # exit(2)
+    # except Exception as e:
+    #     print('Exception: {}'.format(e))
+    #     exit(1)
 
 
 def make_set_groups(list_vk_id):
