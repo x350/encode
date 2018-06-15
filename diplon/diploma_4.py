@@ -1,8 +1,9 @@
 import requests
 import json
+import time
 
 REQUEST_URL = 'https://api.vk.com/method/'
-CONNECTION_ATTEMPTS = 20
+CONNECTION_ATTEMPTS = 10
 VERSION_API_VK = 5.78
 
 with open('config.json', 'r', encoding='utf-8') as file:
@@ -10,16 +11,17 @@ with open('config.json', 'r', encoding='utf-8') as file:
 
 
 def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_param=None):
-    parametrs = dict(access_token=token, v=version)
+    parameters = dict(access_token=token, v=version)
     fields = fields_in_param or {}
     if fields:
-        parametrs.update(fields)
+        parameters.update(fields)
     for i in range(CONNECTION_ATTEMPTS):
-        response = requests.get(url + method, params=parametrs).json()
+        response = requests.get(url + method, params=parameters).json()
         if 'response' in response:
             return response.get('response', {})
         elif 'error' in response:
             if response['error']['error_code'] == 6:
+                time.sleep(0.4)
                 continue
             else:
                 print("Error request - {}".format(response['error']['error_msg']))
@@ -62,7 +64,7 @@ def make_set_groups(list_vk_id):
 
 def format_result(result):
     def make_record(item):
-        print("Проверка группы {} на удаление и блокировку".format(item['id']))
+        print("Проверка группы {} на блокировку и удаление".format(item['id']))
         if detect_deactivated_group(item['id']):
             return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
