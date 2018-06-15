@@ -9,9 +9,11 @@ with open('config.json', 'r', encoding='utf-8') as file:
     TOKEN = json.load(file)['token']
 
 
-def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_param={}):
+def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_param=None):
     parametrs = dict(access_token=token, v=version)
-    parametrs.update(fields_in_param)
+    fields = fields_in_param or {}
+    if fields:
+        parametrs.update(fields)
     for i in range(CONNECTION_ATTEMPS):
         response = requests.get(url + method, params=parametrs).json()
         if 'response' in response:
@@ -64,7 +66,15 @@ def format_result(result):
         if detect_deactivated_group(item['id']):
             return {'gid': item['id'], 'name': item['name'], 'members_count': 0 }
         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
-    return [make_record(item) for item in result]
+    return [make_record(item) for index, item in enumerate(result)]
+
+# def format_result(result):
+#     def make_record(item):
+#         if 'members_count' in item:
+#             return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
+#         else:
+#             return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
+#     return [make_record(item) for index, item in enumerate(result)]
 
 
 def resolve_name(screen_name):
@@ -116,9 +126,7 @@ if __name__ == '__main__':
     friends_group_set = make_set_groups(list_friends)
     list_id = [client_id]
     user_group_set = make_set_groups(list_id)
-
     unique_groups = user_group_set - friends_group_set
-
     result_list = format_result(content_groups(', '.join(str(i) for i in unique_groups)))
 
     with open('groups.json', 'w', encoding='utf-8') as file:
