@@ -52,10 +52,8 @@ def make_set_groups(list_vk_id):
     count_common = len(list_vk_id)
     friends_group_set = set()
     for index, item in enumerate(list_vk_id):
-        rr = make_list_groups(item)
-        for i in rr:
-            if i:
-                friends_group_set.add(i)
+        for i in make_list_groups(item):
+            friends_group_set.add(i)
         print('Обработано {}% друзей'.format(index * 100//count_common))
     return friends_group_set
 
@@ -66,7 +64,7 @@ def format_result(result):
         if detect_deactivated_group(item['id']):
             return {'gid': item['id'], 'name': item['name'], 'members_count': 0 }
         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
-    return [(make_record(item), print(f'Обработанно {index*100//count}% групп')) for index, item in enumerate(result)]
+    return [make_record(item) for item in result]
 
 
 def resolve_name(screen_name):
@@ -122,8 +120,6 @@ if __name__ == '__main__':
     unique_groups = user_group_set - friends_group_set
 
     result_list = format_result(content_groups(', '.join(str(i) for i in unique_groups)))
-
-    # print(detect_deactivated_group(43371321))
 
     with open('groups.json', 'w', encoding='utf-8') as file:
             json.dump(result_list, file)
