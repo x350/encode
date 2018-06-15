@@ -2,7 +2,7 @@ import requests
 import json
 
 REQUEST_URL = 'https://api.vk.com/method/'
-CONNECTION_ATTEMPS = 20
+CONNECTION_ATTEMPTS = 20
 VERSION_API_VK = 5.78
 
 with open('config.json', 'r', encoding='utf-8') as file:
@@ -14,7 +14,7 @@ def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_p
     fields = fields_in_param or {}
     if fields:
         parametrs.update(fields)
-    for i in range(CONNECTION_ATTEMPS):
+    for i in range(CONNECTION_ATTEMPTS):
         response = requests.get(url + method, params=parametrs).json()
         if 'response' in response:
             return response.get('response', {})
@@ -64,7 +64,7 @@ def format_result(result):
     def make_record(item):
         print("Проверка группы {} на удаление и блокировку".format(item['id']))
         if detect_deactivated_group(item['id']):
-            return {'gid': item['id'], 'name': item['name'], 'members_count': 0 }
+            return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
     return [make_record(item) for index, item in enumerate(result)]
 
