@@ -62,21 +62,21 @@ def make_set_groups(list_vk_id):
     return friends_group_set
 
 
-def format_result(result):
-    def make_record(item):
-        print("Проверка группы {} на блокировку и удаление".format(item['id']))
-        if detect_deactivated_group(item['id']):
-            return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
-        return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
-    return [make_record(item) for index, item in enumerate(result)]
-
 # def format_result(result):
 #     def make_record(item):
-#         if 'members_count' in item:
-#             return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
-#         else:
+#         print("Проверка группы {} на блокировку и удаление".format(item['id']))
+#         if detect_deactivated_group(item['id']):
 #             return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
+#         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
 #     return [make_record(item) for index, item in enumerate(result)]
+
+def format_result(result):
+    def make_record(item):
+        if 'members_count' in item:
+            return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
+        else:
+            return {'gid': item['id'], 'name': item['name'], 'members_count': 0}
+    return [make_record(item) for index, item in enumerate(result)]
 
 
 def resolve_name(screen_name):
@@ -104,14 +104,14 @@ def detect_deactivated_user(client_id):
         return False
 
 
-def detect_deactivated_group(client_id):
-    method = 'groups.getById'
-    fields_param = dict(group_ids=client_id)
-    response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
-    if 'deactivated' in response:
-        return True
-    else:
-        return False
+# def detect_deactivated_group(client_id):
+#     method = 'groups.getById'
+#     fields_param = dict(group_ids=client_id)
+#     response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
+#     if 'deactivated' in response:
+#         return True
+#     else:
+#         return False
 
 
 if __name__ == '__main__':
