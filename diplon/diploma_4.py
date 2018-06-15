@@ -59,8 +59,8 @@ def make_set_groups(list_vk_id):
 
 
 def format_result(result):
-    count = len(result)
     def make_record(item):
+        print("Проверка группы {} на удаление и блокировку".format(item['id']))
         if detect_deactivated_group(item['id']):
             return {'gid': item['id'], 'name': item['name'], 'members_count': 0 }
         return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
