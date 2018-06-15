@@ -1,5 +1,4 @@
 import requests
-import time
 import json
 
 REQUEST_URL = 'https://api.vk.com/method/'
@@ -42,14 +41,11 @@ def make_list_groups(user_id):
     return get_vk_request(REQUEST_URL, method, fields_in_param=fields_param).get('items', [])
 
 
-def content_groups(group_id):
+def content_groups(groups_id):
     method = 'groups.getById'
-    fields_param = dict(group_id=group_id, fields='members_count')
-    result = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
-    try:
-        return {'name': result['name'], 'gid': result['id'], 'members_count': result['members_count']}
-    except KeyError as er:
-        print("KeyError: {}".format(er))
+    fields_param = dict(group_ids=groups_id, fields='members_count')
+    result = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)
+    return result
 
 
 def make_set_groups(list_vk_id):
@@ -61,17 +57,16 @@ def make_set_groups(list_vk_id):
             if i:
                 friends_group_set.add(i)
         print('Обработано {}% друзей'.format(index * 100//count_common))
-
     return friends_group_set
 
 
-def make_groups_describe_list(iterable_object):
-    result_list = []
-    count_unique_groups = len(iterable_object)
-    for index, item in enumerate(iterable_object):
-        result_list.append(content_groups(item))
-        print('Обработано {}% уникальных групп'.format(index * 100 // count_unique_groups))
-    return result_list
+def format_result(result):
+    count = len(result)
+    def make_record(item):
+        if detect_deactivated_group(item['id']):
+            return {'gid': item['id'], 'name': item['name'], 'members_count': 0 }
+        return {'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']}
+    return [(make_record(item), print(f'Обработанно {index*100//count}% групп')) for index, item in enumerate(result)]
 
 
 def resolve_name(screen_name):
@@ -99,15 +94,25 @@ def detect_deactivated_user(client_id):
         return False
 
 
+def detect_deactivated_group(client_id):
+    method = 'groups.getById'
+    fields_param = dict(group_ids=client_id)
+    response = get_vk_request(REQUEST_URL, method, fields_in_param=fields_param)[0]
+    if 'deactivated' in response:
+        return True
+    else:
+        return False
+
+
 if __name__ == '__main__':
     client_id = input("ВВедите исследуемый VK_ID: ")
     if not client_id.isdigit():
         client_id = resolve_name(client_id)
     if client_id is 'error':
-        exit(3)
+        exit(1)
 
     if detect_deactivated_user(client_id):
-        exit(4)
+        exit(2)
 
     list_friends = make_list_friends(client_id)
     friends_group_set = make_set_groups(list_friends)
@@ -116,7 +121,9 @@ if __name__ == '__main__':
 
     unique_groups = user_group_set - friends_group_set
 
-    result_list = make_groups_describe_list(unique_groups)
+    result_list = format_result(content_groups(', '.join(str(i) for i in unique_groups)))
+
+    # print(detect_deactivated_group(43371321))
 
     with open('groups.json', 'w', encoding='utf-8') as file:
             json.dump(result_list, file)
