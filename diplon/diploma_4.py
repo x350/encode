@@ -101,7 +101,7 @@ if __name__ == '__main__':
     client_id = input("ВВедите исследуемый VK_ID: ")
     if not client_id.isdigit():
         client_id = resolve_name(client_id)
-    if client_id is 'error':
+    if client_id == 'error':
         exit(1)
 
     if detect_deactivated_user(client_id):
