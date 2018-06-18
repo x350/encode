@@ -5,6 +5,7 @@ import time
 REQUEST_URL = 'https://api.vk.com/method/'
 CONNECTION_ATTEMPTS = 10
 VERSION_API_VK = 5.78
+ERROR_MANY_REQUESTS_PER_SEC = 6
 
 with open('config.json', 'r', encoding='utf-8') as file:
     TOKEN = json.load(file)['token']
@@ -18,9 +19,9 @@ def get_vk_request(url, method, token=TOKEN, version=VERSION_API_VK, fields_in_p
     for i in range(CONNECTION_ATTEMPTS):
         response = requests.get(url + method, params=parameters).json()
         if 'response' in response:
-            return response.get('response', {})
+            return response['response']
         elif 'error' in response:
-            if response['error']['error_code'] == 6:
+            if response['error']['error_code'] == ERROR_MANY_REQUESTS_PER_SEC:
                 time.sleep(0.4)
                 continue
             else:
@@ -58,7 +59,7 @@ def make_set_groups(list_vk_id):
     for index, item in enumerate(list_vk_id):
         for i in make_list_groups(item):
             friends_group_set.add(i)
-        print('Обработано {}% друзей'.format(index * 100//count_common))
+        print('Обработано {}% друзей'.format(index * 100 // count_common))
     return friends_group_set
 
 
