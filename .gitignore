@@ -1,0 +1,182 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+.idea
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+
+# -------------------------------------------
+
+ .idea/
+        Include/
+        Lib/
+        Scripts/
+        cook_book.txt
+        diplon/__pycache__/
+        diplon/config.json
+        diplon/diploma_1.py
+        diplon/diploma_2.py
+        diplon/diploma_3.py
+        diplon/groups.json
+        diplon/pull_post_vk.py
+        diplon/search_groups_vk.py
+        diplon/search_p.py
+        diplon/vk_client_copy.py
+        diplon/vk_grop.py
+        diplon/vk_lib.py
+        django_lec/
+        encod/.idea/
+        encod/Python_course/
+        hw2_1.py
+        id_vk.py
+        "lesson2.4/C\357\200\272"
+        lesson2.4/Lib/
+        lesson2.4/Scripts/
+        lesson2.4/pyvenv.cfg
+        lesson2.5/Lib/
+        lesson2.5/Scripts/
+        lesson2.5/convert.py
+        lesson2.5/convert_for_linux.txt
+        lesson2.5/convert_for_mac.txt
+        lesson2.5/convert_for_windows.txt
+        lesson2.5/img.png
+        lesson2.5/pyvenv.cfg
+        lesson2.5/traning_with_process.py
+        lesson3.2/example.py
+        lesson3.2/res.txt
+        lesson3.2/translation.py
+        lesson3.3/env/
+        lesson3.3/fb_client.py
+        lesson3.3/test.py
+        lesson3.4/ya_metrics.py
+        lesson3.5/currencies.txt
+        lesson3.5/home_task.txt
+        lesson3.5/soap.py
+        lesson3.5/soap_1.py
+        lesson3.5/temps.txt
+        lesson3.5/travel.txt
+        lesson3.5/wsdl.xml
+        lesson4.1/.ipynb_checkpoints/
+        lesson4.2/.ipynb_checkpoints/
+        lesson4.2/04-04-2018_01-14-05/
+        lesson4.2/Potapov.ipynb
+        lesson4.2/Untitled.ipynb
+        lesson4.2/corr.xlsx
+        lesson4.2/korr.png
+        lesson4.2/lesson4.1.ipynb
+        lesson4.2/lesson4.2.ipynb
+        lesson4.2/output.png
+        lesson4.2/temp..xlsx
+        lesson4.2/temp.xlsx
+        "lesson4.2/\320\221\320\260\320\267\320\260 2009-2016 \320\262 \321\200\320\260\320\261\320\276\321\202\320\265 2017 (\320\220\320\262\321\202\320\276\321\201\320\276\321\205\321\200\320\260\320\275\320\265\320\275\320\275\321\213\320\271).xls"
+        "lesson4.2/\320\230\320\236\320\241\320\240 \320\273\320\265\320\263\320\265\320\275\320\264\321\213 \320\223\320\276\321\202\320\276\320\262\320\260\321\217.xlsx"
+        lesson4.3/.ipynb_checkpoints/
+        lesson4.3/Untitled1.ipynb
+        lesson4.3/lesson4.3.ipynb
+        lesson4.3/lesson4.3_2.ipynb
+        lesson5.2/__pycache__/
+        lesson5.2/netology-interview/
+        pattern.py
+        pattern2.py
+        pattern3.py
+        pythoncourse/
+        ssh/
+        tcl/
+        tr.py
